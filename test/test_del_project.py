@@ -3,7 +3,7 @@ from model.project import Project
 import operator
 
 
-def test_del_project(app, db):
+def test_del_project(app, login, db):
     if len(db.get_project_list()) == 0:
         app.project.create(Project(name='New_project'))
     old_project_list = db.get_project_list()
