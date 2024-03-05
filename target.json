@@ -7,7 +7,7 @@
     "password": "root"
   },
   "db": {
-    "host":"localhost",
+    "host": "localhost",
     "name": "bugtracker",
     "user": "root",
     "password": ""
@@ -16,6 +16,11 @@
     "host":"localhost",
     "username": "mantis",
     "password": "mantis"
-  }
-
+  },
+  "james": {
+    "host": "localhost",
+    "port": "4555",
+    "username": "root",
+    "password": "root"
+    }
 }

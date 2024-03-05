@@ -30,10 +30,9 @@ def app(request, config):
     global fixture
     browser = request.config.getoption("--browser")
     if fixture is None or not fixture.is_valid():
-        fixture = Application(browser=browser, base_url=config['web']['baseUrl'])
+        fixture = Application(browser=browser, config=config)
         web_admin = config['webadmin']
-        fixture.session.ensure_login(username=web_admin["username"],
-                                     password=web_admin["password"])
+        fixture.session.ensure_login(username=web_admin["username"], password=web_admin["password"])
     return fixture
 
 
@@ -42,6 +41,7 @@ def configure_server(request, config):
     install_server_configuration(
         config['ftp']['host'], config['ftp']['username'], config['ftp']['password']
     )
+
     def fin():
         restore_server_configuration(
             config['ftp']['host'], config['ftp']['username'], config['ftp']['password']
@@ -61,12 +61,14 @@ def install_server_configuration(host, username, password):
             ), 'config_inc.php'
         )
 
+
 def restore_server_configuration(host, username, password):
     with ftputil.FTPHost(host, username, password) as remote:
         if remote.path.isfile('config_inc.php.bak'):
             if remote.path.isfile('config_inc.php'):
                 remote.remove('config_inc.php')
             remote.rename('config_inc.php.bak', 'config_inc.php')
+
 
 @pytest.fixture(scope="session")
 def db(request):
@@ -78,6 +80,7 @@ def db(request):
         dbfixture.destroy()
     request.addfinalizer(fin)
     return dbfixture
+
 
 @pytest.fixture(scope='session', autouse=True)
 def stop(request):
